@@ -1,0 +1,6 @@
+@Carneirofc.Scaffold.Web_HostAddress = http://localhost:5246
+
+GET {{Carneirofc.Scaffold.Web_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
