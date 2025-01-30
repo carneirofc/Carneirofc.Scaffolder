@@ -4,6 +4,6 @@ namespace Carneirofc.Scaffold.Application.Contracts.Services
 {
     public interface IInstallerService
     {
-        public IAsyncEnumerable<Installer> Get(string path, string? filter);
+        public IAsyncEnumerable<Installer> List(string path, string? filter);
     }
 }

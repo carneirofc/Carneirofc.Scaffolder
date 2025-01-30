@@ -17,12 +17,15 @@ namespace Carneirofc.Scaffold.Web.Extensions
         public static void AddCustomApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IInstallerService, InstallerService>();
+            services.AddScoped<IWeatherReportService, WeatherReportService>();
         }
 
         public static void AddCustomSwagger(this IServiceCollection services)
         {
+#if NET9_0_OR_GREATER
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             services.AddOpenApi();
+#endif
 
             // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio-code#add-and-configure-swagger-middleware
             services.AddEndpointsApiExplorer();

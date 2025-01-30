@@ -16,7 +16,7 @@ namespace Carneirofc.Scaffold.Application.Services
             _httpClientFactory = httpClientFactory;
         }
 
-        async public IAsyncEnumerable<Installer> Get(string path, string? filter)
+        async public IAsyncEnumerable<Installer> List(string path, string? filter)
         {
             if (string.IsNullOrWhiteSpace(path))
             {
@@ -41,9 +41,6 @@ namespace Carneirofc.Scaffold.Application.Services
                     Size = f.Length
                 };
             }
-            // using HttpClient client = _httpClientFactory.CreateClient();
-
-            // throw new NotImplementedException();
         }
     }
 }

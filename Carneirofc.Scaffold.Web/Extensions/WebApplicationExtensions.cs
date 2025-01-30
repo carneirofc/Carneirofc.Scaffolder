@@ -16,15 +16,19 @@ namespace Carneirofc.Scaffold.Web.Extensions
                 Predicate = healthCheck => healthCheck.Tags.Contains("live")
             });
 
+#if false
             app.UseW3CLogging();
+#endif
 
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
 
+#if NET9_0_OR_GREATER
                 // Configure the HTTP request pipeline.
                 app.MapOpenApi();
+#endif
             }
 
             app.MapControllers();
