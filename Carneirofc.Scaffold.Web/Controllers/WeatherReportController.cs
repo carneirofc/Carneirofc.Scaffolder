@@ -1,9 +1,11 @@
+using Asp.Versioning;
 using Carneirofc.Scaffold.Application.Contracts.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Carneirofc.Scaffold.Web.Controllers
 {
     [ApiController]
+    [ApiVersion(1.0)]
     [Route("api/[controller]")]
     public class WeatherReportController : ControllerBase
     {

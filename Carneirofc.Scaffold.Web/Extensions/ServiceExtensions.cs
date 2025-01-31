@@ -1,10 +1,16 @@
+using Asp.Versioning;
 using Carneirofc.Scaffold.Application.Contracts.Services;
+using Carneirofc.Scaffold.Application.Contracts.UseCases.Installers;
 using Carneirofc.Scaffold.Application.Services;
+using Carneirofc.Scaffold.Application.UseCases.Installers;
 using Carneirofc.Scaffold.Infrastructure.BackgroundServices;
 using Carneirofc.Scaffold.Infrastructure.HealthChecks;
+using Carneirofc.Scaffold.Web.Configuration;
+using Carneirofc.Scaffold.Web.Validators;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
+using Microsoft.Extensions.Options;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using FluentValidation;
 
 namespace Carneirofc.Scaffold.Web.Extensions
 {
@@ -16,43 +22,40 @@ namespace Carneirofc.Scaffold.Web.Extensions
         }
         public static void AddCustomApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped<IInstallersListUseCase, InstallersListUseCase>();
             services.AddScoped<IInstallerService, InstallerService>();
             services.AddScoped<IWeatherReportService, WeatherReportService>();
+
+            services.AddValidatorsFromAssemblyContaining<InstallerQueryValidator>();
         }
 
         public static void AddCustomSwagger(this IServiceCollection services)
         {
+
 #if NET9_0_OR_GREATER
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             services.AddOpenApi();
 #endif
 
             // https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio-code#add-and-configure-swagger-middleware
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Installers Service API",
-                    Description = "An ASP.NET Core Web API for managing local installers.",
-                    TermsOfService = new Uri("https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html#SEC1"),
-                    Contact = new OpenApiContact
-                    {
-                        Name = "carneirofc",
-                        Url = new Uri("https://github.com/carneirofc")
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "LGPLv2.0",
-                        Url = new Uri("https://www.gnu.org/licenses/old-licenses/lgpl-2.0.html#SEC1")
-                    }
-                });
 
-                // Get the XML documentation file for the current project
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            services.AddProblemDetails();
+            services.AddEndpointsApiExplorer();
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ApiVersionReader = new QueryStringApiVersionReader("api-version");
+            })
+                .AddMvc()
+                .AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
             });
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
         }
 
         public static void AddCustomHealthChecks(this IServiceCollection services)

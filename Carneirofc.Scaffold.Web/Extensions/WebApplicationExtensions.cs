@@ -6,6 +6,14 @@ namespace Carneirofc.Scaffold.Web.Extensions
     {
         public static void Configure(this WebApplication app)
         {
+            app.UseHttpsRedirection();
+            app.UseHsts();
+            app.UseCors(configurePolicy =>
+            {
+                configurePolicy.AllowAnyOrigin();
+                configurePolicy.AllowAnyMethod();
+                configurePolicy.AllowAnyHeader();
+            });
             app.MapHealthChecks("/healthz/ready", new HealthCheckOptions
             {
                 Predicate = healthCheck => healthCheck.Tags.Contains("ready")
@@ -23,7 +31,15 @@ namespace Carneirofc.Scaffold.Web.Extensions
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(options =>
+                {
+                    foreach (var description in app.DescribeApiVersions())
+                    {
+                        var url = $"/swagger/{description.GroupName}/swagger.json";
+                        var name = description.GroupName.ToUpperInvariant();
+                        options.SwaggerEndpoint(url, name);
+                    }
+                });
 
 #if NET9_0_OR_GREATER
                 // Configure the HTTP request pipeline.

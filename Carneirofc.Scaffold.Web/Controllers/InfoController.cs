@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Carneirofc.Scaffold.Web.Controllers.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.FeatureManagement;
@@ -5,6 +6,7 @@ using Microsoft.FeatureManagement;
 namespace Carneirofc.Scaffold.Web.Controllers
 {
     [ApiController]
+    [ApiVersion(1.0)]
     [Route("api/[controller]")]
     public class InfoController : ControllerBase
     {
