@@ -6,14 +6,8 @@ namespace Carneirofc.Scaffold.Web.Extensions
     {
         public static void Configure(this WebApplication app)
         {
-            app.UseHttpsRedirection();
-            app.UseHsts();
-            app.UseCors(configurePolicy =>
-            {
-                configurePolicy.AllowAnyOrigin();
-                configurePolicy.AllowAnyMethod();
-                configurePolicy.AllowAnyHeader();
-            });
+
+
             app.MapHealthChecks("/healthz/ready", new HealthCheckOptions
             {
                 Predicate = healthCheck => healthCheck.Tags.Contains("ready")
@@ -24,9 +18,22 @@ namespace Carneirofc.Scaffold.Web.Extensions
                 Predicate = healthCheck => healthCheck.Tags.Contains("live")
             });
 
-#if false
-            app.UseW3CLogging();
-#endif
+            app.UseHttpsRedirection();
+            app.UseHsts();
+            app.UseRouting();
+            app.UseCors(configurePolicy =>
+            {
+                configurePolicy.AllowAnyOrigin();
+                configurePolicy.AllowAnyMethod();
+                configurePolicy.AllowAnyHeader();
+            });
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            if (false)
+            {
+                app.UseW3CLogging();
+            }
 
             if (app.Environment.IsDevelopment())
             {
@@ -48,7 +55,6 @@ namespace Carneirofc.Scaffold.Web.Extensions
             }
 
             app.MapControllers();
-            app.UseHttpsRedirection();
         }
     }
 }
