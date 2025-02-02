@@ -1,0 +1,17 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "Carneirofc.Scaffold.Web\\Carneirofc.Scaffold.Web.csproj",
+        "Action": "Start",
+        "DebugTarget": "https"
+      },
+      {
+        "Path": "Carneirofc.Scaffold.TermGui\\Carneirofc.Scaffold.TermGui.csproj",
+        "Action": "Start",
+        "DebugTarget": "Carneirofc.Scaffold.TermGui"
+      }
+    ]
+  }
+]

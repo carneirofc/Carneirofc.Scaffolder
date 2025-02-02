@@ -25,13 +25,15 @@ namespace Carneirofc.Scaffold.Application.Services
             var dinfo = new DirectoryInfo(path);
             if (!dinfo.Exists)
             {
-                throw new DirectoryNotFoundException($"Path '{path}' not found");
+                // return empty
+                yield break;
+                //throw new DirectoryNotFoundException($"Path '{path}' not found");
             }
             if (filter is null)
             {
                 filter = "*";
             }
-            var files = dinfo.GetFiles(filter, SearchOption.AllDirectories);
+            var files = dinfo.GetFiles(filter, SearchOption.TopDirectoryOnly);
             foreach (var f in files)
             {
                 yield return new Installer
